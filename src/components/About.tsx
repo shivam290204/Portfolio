@@ -16,12 +16,12 @@ export default function About() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // If the section leaves the viewport (entry.isIntersecting is false), close the deck
-        if (!entry.isIntersecting) {
+        // Close the deck seamlessly if user scrolls past the section
+        if (!entry.isIntersecting || entry.intersectionRatio < 0.05) {
           setIsOpened(false);
         }
       },
-      { threshold: 0.1 } // triggers when 90% of the section is out of view
+      { threshold: 0.02, rootMargin: "-5% 0px -5% 0px" } // Triggers rapidly when scrolling out
     );
 
     if (sectionRef.current) {
@@ -139,10 +139,10 @@ export default function About() {
 
       {/* Interactive Deck Area */}
       <div 
-        className="relative w-full max-w-6xl mx-auto flex items-center justify-center cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+        className={`relative w-full max-w-6xl mx-auto flex items-center justify-center cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${isMobile && isOpened ? "flex-col gap-8 h-auto pb-12 pt-6" : ""}`}
         style={{
-          // Dynamically adjust height to accommodate the spreading cards based on device type
-          height: isOpened ? (isMobile ? "1600px" : "550px") : "450px"
+          // Dynamically adjust height to accommodate the spreading cards on desktop
+          height: isOpened && !isMobile ? "550px" : (!isOpened ? "450px" : "auto")
         }}
         onClick={() => setIsOpened(!isOpened)}
       >
@@ -167,18 +167,18 @@ export default function About() {
           // Mobile: Vertical stack with slight alternating tilts
           // Desktop: Beautiful horizontal arc
           const mobileSpreadY = (index - 1.5) * 380;
-          const spreadX = isMobile ? 0 : (index - 1.5) * 270;
-          const spreadY = isMobile ? mobileSpreadY : Math.abs(index - 1.5) * 30;
-          const spreadRotate = isMobile ? (index % 2 === 0 ? -3 : 3) : (index - 1.5) * 6;
+          const spreadX = (index - 1.5) * 270;
+          const spreadY = Math.abs(index - 1.5) * 30;
+          const spreadRotate = (index - 1.5) * 6;
           
           const openedTransform = `translate(${spreadX}px, ${spreadY}px) rotate(${spreadRotate}deg)`;
 
           return (
             <div
               key={card.id}
-              className={`absolute w-[260px] h-[360px] rounded-[32px] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.6)] border border-white/20 origin-bottom flex flex-col transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${card.color} ${card.textColor} ${isOpened ? 'hover:scale-105 hover:-translate-y-6' : ''}`}
+              className={`${isMobile && isOpened ? "relative" : "absolute origin-bottom"} w-[260px] h-[360px] rounded-[32px] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.6)] border border-white/20 flex flex-col transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${card.color} ${card.textColor} ${isOpened ? 'hover:scale-105 hover:-translate-y-6' : ''}`}
               style={{
-                transform: isOpened ? openedTransform : stackedTransform,
+                transform: isOpened ? (isMobile ? 'none' : openedTransform) : stackedTransform,
                 zIndex: isOpened ? 10 + index : index, // Optional hover elevation can be handled via CSS hover + z-index
               }}
               onMouseEnter={(e) => {

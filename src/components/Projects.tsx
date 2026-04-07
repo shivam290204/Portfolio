@@ -114,7 +114,7 @@ export default function Projects() {
 
                   {/* Overlapping description card */}
                   <div 
-                    className="md:bg-[#0f172a]/95 backdrop-blur-sm md:border border-white/5 rounded-xl md:p-6 mb-6 shadow-xl hover:border-primary/20 transition-all w-full leading-relaxed"
+                    className="bg-[#0f172a]/90 backdrop-blur-md border border-white/10 md:border-white/5 rounded-xl p-5 md:p-6 mb-6 shadow-xl hover:border-primary/20 transition-all w-full leading-relaxed relative z-30 mt-[-1rem] md:mt-0"
                   >
                     <p className="text-muted-foreground text-[15px] sm:text-base drop-shadow-sm">
                       {project.description}
@@ -122,12 +122,12 @@ export default function Projects() {
                   </div>
 
                   <ul
-                    className={`flex flex-wrap gap-4 text-xs font-mono text-muted-foreground mb-8 ${
+                    className={`flex flex-wrap gap-2.5 sm:gap-4 text-xs font-mono text-muted-foreground mb-8 ${
                       isEven ? "md:justify-end" : "md:justify-start"
                     }`}
                   >
                     {project.techStack.map((tech) => (
-                      <li key={tech} className="whitespace-nowrap hover:text-primary transition-colors cursor-default">
+                      <li key={tech} className="whitespace-nowrap px-2.5 py-1 rounded bg-white/[0.03] border border-white-[0.05] hover:text-primary transition-colors cursor-default">
                         {tech}
                       </li>
                     ))}
