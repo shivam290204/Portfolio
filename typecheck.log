@@ -1,0 +1,7 @@
+
+> shivam-portfolio@0.0.0 typecheck
+> tsc -p tsconfig.json --noEmit
+
+src/components/Skills.tsx(3,33): error TS2724: '"react-icons/si"' has no exported member named 'SiCss3'. Did you mean 'SiCss'?
+src/components/Skills.tsx(3,89): error TS2305: Module '"react-icons/si"' has no exported member 'SiVisualstudiocode'.
+src/components/ui/sonner.tsx(3,26): error TS2307: Cannot find module 'next-themes' or its corresponding type declarations.
