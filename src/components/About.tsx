@@ -13,26 +13,7 @@ export default function About() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // Close the deck seamlessly if user scrolls past the section
-        if (!entry.isIntersecting || entry.intersectionRatio < 0.05) {
-          setIsOpened(false);
-        }
-      },
-      { threshold: 0.02, rootMargin: "-5% 0px -5% 0px" } // Triggers rapidly when scrolling out
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
-  }, []);
+  // User manually clicks to close instead of relying on IntersectionObserver.
 
   // Consolidate the previous 7 items into 4 distinct, colorful cards
   // perfectly matching the reference image's color palette and vibe.
@@ -126,7 +107,7 @@ export default function About() {
   ];
 
   return (
-    <section id="about" ref={sectionRef} className="relative min-h-screen py-24 px-4 sm:px-6 overflow-hidden flex flex-col justify-center items-center bg-black/30">
+    <section id="about" ref={sectionRef} className="relative min-h-screen py-24 px-4 sm:px-6 overflow-hidden flex flex-col justify-center items-center bg-black/30" data-scroll-section>
       
       {/* Header */}
       <div className="text-center mb-10 z-20 pointer-events-none">
@@ -141,8 +122,9 @@ export default function About() {
       <div 
         className={`relative w-full max-w-6xl mx-auto flex items-center justify-center cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${isMobile && isOpened ? "flex-col gap-8 h-auto pb-12 pt-6" : ""}`}
         style={{
-          // Dynamically adjust height to accommodate the spreading cards on desktop
-          height: isOpened && !isMobile ? "550px" : (!isOpened ? "450px" : "auto")
+          // Maintain a constant static height on Desktop to prevent Locomotive Scroll layout-shift glitches
+          height: isMobile ? "auto" : "550px",
+          minHeight: isMobile && !isOpened ? "480px" : "auto",
         }}
         onClick={() => setIsOpened(!isOpened)}
       >

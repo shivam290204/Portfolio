@@ -56,10 +56,15 @@ function App() {
       // each time the window updates, we should refresh ScrollTrigger and then update LocomotiveScroll. 
       ScrollTrigger.addEventListener("refresh", () => locoScroll.update());
 
-      // after everything is set up, refresh() ScrollTrigger and update LocomotiveScroll because padding may have been added for pinning, etc.
-      ScrollTrigger.refresh();
+      // Force updates when DOM elements resize (crucial for images loading and breaking LocoScroll heights)
+      const resizeObserver = new ResizeObserver(() => {
+        ScrollTrigger.refresh();
+        locoScroll.update();
+      });
+      resizeObserver.observe(scrollContainer);
 
       return () => {
+        resizeObserver.disconnect();
         locoScroll.destroy();
         ScrollTrigger.removeEventListener("refresh", () => locoScroll.update());
         ScrollTrigger.getAll().forEach((t: any) => t.kill());
