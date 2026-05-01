@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { FaJava, FaReact, FaNodeJs, FaPython, FaDocker, FaGitAlt, FaGithub } from "react-icons/fa";
-import { SiJavascript, SiHtml5, SiCss, SiExpress, SiSpringboot, SiMysql, SiPostgresql, SiVercel, SiC, SiTailwindcss, SiNextdotjs } from "react-icons/si";
+import { SiJavascript, SiHtml5, SiCss, SiExpress, SiSpringboot, SiMysql, SiPostgresql, SiVercel, SiC, SiTailwindcss, SiNextdotjs, SiIntellijidea } from "react-icons/si";
 import { VscVscode } from "react-icons/vsc";
 
 declare const gsap: any;
@@ -25,7 +25,8 @@ const skills = [
   { name: "GitHub", icon: FaGithub, color: "hover:text-foreground hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]" },
   { name: "Docker", icon: FaDocker, color: "hover:text-[#2496ED] hover:drop-shadow-[0_0_15px_rgba(36,150,237,0.8)]" },
   { name: "VS Code", icon: VscVscode, color: "hover:text-[#007ACC] hover:drop-shadow-[0_0_15px_rgba(0,122,204,0.8)]" },
-  { name: "Vercel", icon: SiVercel, color: "hover:text-foreground hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]" }
+  { name: "Vercel", icon: SiVercel, color: "hover:text-foreground hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]" },
+  { name: "IntelliJ IDEA", icon: SiIntellijidea, color: "hover:text-foreground hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]" }
 ];
 
 export default function Skills() {
