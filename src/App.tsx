@@ -8,7 +8,6 @@ import Experience from "@/components/Experience";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ThreeBackground from "@/components/ThreeBackground";
-import CustomCursor from "@/components/CustomCursor";
 
 declare const LocomotiveScroll: any;
 declare const gsap: any;
@@ -76,7 +75,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background text-foreground relative">
-      <CustomCursor />
       {/* 
         Animated background must be outside Locomotive scroll container 
         with position absolute/fixed so it doesn't scroll with the page content 
