@@ -1,8 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Briefcase, Calendar, MapPin, ExternalLink, ChevronRight } from "lucide-react";
 
-declare const gsap: any;
-declare const ScrollTrigger: any;
 
 const experiences = [
   {
@@ -32,28 +30,8 @@ const experiences = [
 export default function Experience() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
-
-    const ctx = gsap.context(() => {
-      gsap.from(".experience-fade", {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 75%",
-        },
-        x: -40,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "power3.out",
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section id="experience" ref={sectionRef} className="relative py-28 px-4 sm:px-6 bg-white/1" data-scroll-section>
+    <section id="experience" ref={sectionRef} className="relative py-28 px-4 sm:px-6 bg-white/1">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
         <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent" />

@@ -107,7 +107,7 @@ export default function About() {
   ];
 
   return (
-    <section id="about" ref={sectionRef} className="relative min-h-screen py-24 px-4 sm:px-6 overflow-hidden flex flex-col justify-center items-center bg-black/30" data-scroll-section>
+    <section id="about" ref={sectionRef} className="relative min-h-screen py-24 px-4 sm:px-6 overflow-hidden flex flex-col justify-center items-center bg-black/30">
       
       {/* Header */}
       <div className="text-center mb-10 z-20 pointer-events-none">

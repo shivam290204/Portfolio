@@ -1,35 +1,12 @@
 import { useRef, useEffect } from "react";
 import { Mail } from "lucide-react";
 
-declare const gsap: any;
-declare const ScrollTrigger: any;
 
 export default function Contact() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (typeof gsap === "undefined") return;
-
-    const elements = sectionRef.current?.querySelectorAll(".contact-fade");
-    if (!elements) return;
-
-    gsap.set(elements, { opacity: 0, y: 30 });
-    gsap.to(elements, {
-      opacity: 1,
-      y: 0,
-      duration: 0.6,
-      stagger: 0.1,
-      ease: "power3.out",
-      delay: 0.2,
-      scrollTrigger: typeof ScrollTrigger !== "undefined" ? {
-        trigger: sectionRef.current,
-        start: "top 90%",
-      } : undefined,
-    });
-  }, []);
-
   return (
-    <section id="contact" ref={sectionRef} className="relative py-28 px-4 sm:px-6" data-scroll-section>
+    <section id="contact" ref={sectionRef} className="relative py-28 px-4 sm:px-6">
       {/* Top divider line */}
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
 

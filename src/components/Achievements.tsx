@@ -1,8 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Code2, Trophy, Users, Star, Zap, BookOpen, Award, Target } from "lucide-react";
 
-declare const gsap: any;
-declare const ScrollTrigger: any;
 
 const achievements = [
   {
@@ -82,29 +80,8 @@ const achievements = [
 export default function Achievements() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
-
-    const ctx = gsap.context(() => {
-      gsap.from(".achievement-fade", {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-        },
-        y: 40,
-        scale: 0.95,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: "power2.out",
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section id="achievements" ref={sectionRef} className="relative py-28 px-4 sm:px-6" data-scroll-section>
+    <section id="achievements" ref={sectionRef} className="relative py-28 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
         <div className="achievement-fade mb-16 text-center">
           <span className="text-primary text-sm font-mono tracking-widest uppercase">Achievements</span>

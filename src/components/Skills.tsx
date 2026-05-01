@@ -3,9 +3,6 @@ import { FaJava, FaReact, FaNodeJs, FaPython, FaDocker, FaGitAlt, FaGithub } fro
 import { SiJavascript, SiHtml5, SiCss, SiExpress, SiSpringboot, SiMysql, SiPostgresql, SiVercel, SiC, SiTailwindcss, SiNextdotjs, SiIntellijidea } from "react-icons/si";
 import { VscVscode } from "react-icons/vsc";
 
-declare const gsap: any;
-declare const ScrollTrigger: any;
-
 const skills = [
   { name: "Java", icon: FaJava, color: "hover:text-[#f89820] hover:drop-shadow-[0_0_15px_rgba(248,152,32,0.8)]" },
   { name: "JavaScript", icon: SiJavascript, color: "hover:text-[#F7DF1E] hover:drop-shadow-[0_0_15px_rgba(247,223,30,0.8)]" },
@@ -32,28 +29,8 @@ const skills = [
 export default function Skills() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
-
-    const ctx = gsap.context(() => {
-      gsap.from(".skill-fade", {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 75%",
-        },
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "back.out(1.2)",
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section id="skills" ref={sectionRef} className="relative py-28 px-4 sm:px-6 bg-white/1 overflow-hidden" data-scroll-section>
+    <section id="skills" ref={sectionRef} className="relative py-28 px-4 sm:px-6 bg-white/1 overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
         <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent" />

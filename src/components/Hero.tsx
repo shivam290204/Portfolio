@@ -78,10 +78,9 @@ export default function Hero() {
       ref={heroRef}
       className="relative min-h-[100vh] w-full flex items-center justify-center overflow-hidden bg-black py-20 lg:py-0"
       id="home"
-      data-scroll-section
     >
       {/* Background glow and grid */}
-      <div className="absolute inset-0 radial-bg pointer-events-none opacity-40" data-scroll data-scroll-speed="-2" />
+      <div className="absolute inset-0 radial-bg pointer-events-none opacity-40" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.15)_0%,transparent_70%)] pointer-events-none" />
 
       {/* Main Content Container */}

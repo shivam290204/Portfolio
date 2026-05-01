@@ -1,8 +1,6 @@
 import { useEffect, useRef } from "react";
 import { ExternalLink, Github } from "lucide-react";
 
-declare const gsap: any;
-declare const ScrollTrigger: any;
 
 // Using the exact content as requested, but adding the newly generated mockup images.
 const projects = [
@@ -34,28 +32,8 @@ const projects = [
 export default function Projects() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
-
-    const ctx = gsap.context(() => {
-      gsap.from(".project-fade", {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 75%",
-        },
-        y: 60,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: "power3.out",
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section id="projects" ref={sectionRef} className="relative py-28 px-4 sm:px-6 mb-10" data-scroll-section>
+    <section id="projects" ref={sectionRef} className="relative py-28 px-4 sm:px-6 mb-10">
       <div className="max-w-3xl lg:max-w-4xl mx-auto">
         <div className="project-fade mb-24 md:mb-32 text-center md:text-left">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold flex items-center md:justify-start justify-center gap-4">
