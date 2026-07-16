@@ -1,104 +1,110 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 
-const PARTICLE_COUNT = 60;
+const BLOCK_COUNT = 45;
 
 export default function ThreeBackground() {
-  const particles = useMemo(() => {
-    return Array.from({ length: PARTICLE_COUNT }).map((_, i) => ({
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({
+        x: (e.clientX / window.innerWidth - 0.5) * 20,
+        y: (e.clientY / window.innerHeight - 0.5) * 20,
+      });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  const floatingBlocks = useMemo(() => {
+    return Array.from({ length: BLOCK_COUNT }).map((_, i) => ({
       id: i,
-      size: Math.random() * 2.5 + 0.8,
-      left: Math.random() * 100,
-      top: Math.random() * 100,
-      color: i % 4 === 0 ? "hsl(262 83% 65%)" : i % 4 === 1 ? "hsl(217 91% 60%)" : i % 4 === 2 ? "hsl(217 91% 80%)" : "hsl(262 83% 80%)",
-      opacity: Math.random() * 0.4 + 0.05,
-      duration: Math.random() * 14 + 8,
-      delay: Math.random() * 12,
+      // Small block sizes aligning with typical grid units (16px, 24px, 32px, 48px)
+      size: i % 4 === 0 ? 24 : i % 4 === 1 ? 32 : i % 4 === 2 ? 16 : 48,
+      left: Math.floor(Math.random() * 96),
+      top: Math.floor(Math.random() * 96),
+      opacity: Math.random() * 0.35 + 0.15,
+      duration: Math.random() * 20 + 12,
+      delay: Math.random() * 8,
     }));
   }, []);
 
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-      {/* Primary radial glow — top right */}
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#FAFAFA]">
+      {/* Base fine CSS grid for guaranteed small block structure */}
       <div
-        className="absolute rounded-full blur-[120px]"
+        className="absolute inset-0 opacity-40"
         style={{
-          width: "700px",
-          height: "700px",
-          background: "radial-gradient(circle, hsl(217 91% 60% / 0.14), transparent 70%)",
-          top: "-15%",
-          right: "-10%",
+          backgroundImage: `
+            linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px)
+          `,
+          backgroundSize: "28px 28px",
+        }}
+      />
+
+      {/* Main image background (block type grid image provided by user, tiled for small block size) */}
+      <div
+        className="absolute -inset-10 transition-transform duration-300 ease-out opacity-90"
+        style={{
+          backgroundImage: `url('/block-grid-bg.png')`,
+          backgroundSize: "320px auto", // Keeps the image blocks small and crisp
+          backgroundRepeat: "repeat",
+          backgroundPosition: "0 0",
+          transform: `translate(${mousePos.x * 0.25}px, ${mousePos.y * 0.25}px)`,
+        }}
+      />
+
+      {/* Primary subtle ambient glow — top right */}
+      <div
+        className="absolute rounded-full blur-[140px]"
+        style={{
+          width: "600px",
+          height: "600px",
+          background: "radial-gradient(circle, rgba(59, 130, 246, 0.07), transparent 70%)",
+          top: "-10%",
+          right: "-5%",
           animation: "blobMove1 14s ease-in-out infinite alternate",
         }}
       />
+
       {/* Secondary glow — bottom left */}
       <div
-        className="absolute rounded-full blur-[100px]"
+        className="absolute rounded-full blur-[140px]"
         style={{
           width: "550px",
           height: "550px",
-          background: "radial-gradient(circle, hsl(262 83% 65% / 0.1), transparent 70%)",
-          bottom: "0%",
-          left: "-8%",
-          animation: "blobMove2 17s ease-in-out infinite alternate",
-        }}
-      />
-      {/* Tertiary glow — center */}
-      <div
-        className="absolute rounded-full blur-[90px]"
-        style={{
-          width: "400px",
-          height: "400px",
-          background: "radial-gradient(circle, hsl(217 91% 55% / 0.06), transparent 70%)",
-          top: "35%",
-          left: "35%",
-          animation: "blobMove3 20s ease-in-out infinite alternate",
+          background: "radial-gradient(circle, rgba(139, 92, 246, 0.05), transparent 70%)",
+          bottom: "-5%",
+          left: "-5%",
+          animation: "blobMove2 18s ease-in-out infinite alternate",
         }}
       />
 
-      {/* Grid overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)
-          `,
-          backgroundSize: "60px 60px",
-        }}
-      />
-
-      {/* Floating particles */}
-      {particles.map((p) => (
+      {/* Floating interactive small technical square blocks */}
+      {floatingBlocks.map((b) => (
         <div
-          key={p.id}
-          className="absolute rounded-full"
+          key={b.id}
+          className="absolute rounded-xs border border-slate-300/60 bg-slate-200/50 backdrop-blur-[1px] transition-all duration-300"
           style={{
-            width: `${p.size}px`,
-            height: `${p.size}px`,
-            background: p.color,
-            left: `${p.left}%`,
-            top: `${p.top}%`,
-            opacity: p.opacity,
-            animation: `floatParticle ${p.duration}s ease-in-out ${p.delay}s infinite`,
+            width: `${b.size}px`,
+            height: `${b.size}px`,
+            left: `${b.left}%`,
+            top: `${b.top}%`,
+            opacity: b.opacity,
+            animation: `floatBlock ${b.duration}s ease-in-out ${b.delay}s infinite`,
           }}
         />
       ))}
 
-      {/* Animated wireframe-like lines (decorative) */}
+      {/* Subtle geometric technical overlay */}
       <svg
-        className="absolute inset-0 w-full h-full opacity-[0.04]"
+        className="absolute inset-0 w-full h-full opacity-[0.06]"
         xmlns="http://www.w3.org/2000/svg"
-        style={{ animation: "rotateSvg 40s linear infinite" }}
       >
-        <defs>
-          <radialGradient id="g1" cx="50%" cy="50%">
-            <stop offset="0%" stopColor="hsl(217 91% 60%)" stopOpacity="1" />
-            <stop offset="100%" stopColor="hsl(217 91% 60%)" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-        <circle cx="75%" cy="20%" r="200" fill="none" stroke="url(#g1)" strokeWidth="1" />
-        <circle cx="75%" cy="20%" r="140" fill="none" stroke="url(#g1)" strokeWidth="0.5" />
-        <circle cx="20%" cy="75%" r="160" fill="none" stroke="url(#g1)" strokeWidth="0.7" />
+        <circle cx="80%" cy="25%" r="220" fill="none" stroke="#64748b" strokeWidth="1" strokeDasharray="6 6" />
+        <circle cx="80%" cy="25%" r="160" fill="none" stroke="#64748b" strokeWidth="0.5" />
+        <circle cx="15%" cy="70%" r="180" fill="none" stroke="#64748b" strokeWidth="0.7" strokeDasharray="4 4" />
       </svg>
 
       <style>{`
@@ -112,21 +118,13 @@ export default function ThreeBackground() {
           50% { transform: translate(30px, -30px) scale(1.08); }
           100% { transform: translate(-20px, 20px) scale(0.95); }
         }
-        @keyframes blobMove3 {
-          0% { transform: translate(0, 0) scale(1); }
-          100% { transform: translate(40px, -40px) scale(1.1); }
-        }
-        @keyframes floatParticle {
-          0%, 100% { transform: translateY(0px) translateX(0px) scale(1); opacity: inherit; }
-          25% { transform: translateY(-25px) translateX(12px) scale(1.1); }
-          50% { transform: translateY(-12px) translateX(-8px) scale(0.9); }
-          75% { transform: translateY(-35px) translateX(6px) scale(1.05); }
-        }
-        @keyframes rotateSvg {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+        @keyframes floatBlock {
+          0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+          33% { transform: translateY(-12px) rotate(2deg) scale(1.02); }
+          66% { transform: translateY(-6px) rotate(-1deg) scale(0.99); }
         }
       `}</style>
     </div>
   );
 }
+

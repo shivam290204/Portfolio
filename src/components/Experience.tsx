@@ -1,123 +1,127 @@
-import { useEffect, useRef } from "react";
-import { Briefcase, Calendar, MapPin, ExternalLink, ChevronRight } from "lucide-react";
-
-
-const experiences = [
-  {
-    role: "AI Summer Training Intern",
-    company: "CSRBOX & IBM SkillsBuild",
-    period: "July – August 2025",
-    location: "Remote",
-    type: "Internship",
-    description:
-      "Completed an intensive AI Summer Training program focused on Agentic AI systems. Worked with IBM SkillsBuild curriculum covering advanced AI concepts, machine learning pipelines, and intelligent agent architectures.",
-    highlights: [
-      "Trained on Agentic AI systems and autonomous agent frameworks",
-      "Explored IBM SkillsBuild AI curriculum covering ML and deep learning",
-      "Built end-to-end AI-powered mini-projects demonstrating agentic behavior",
-      "Learned prompt engineering, LLM integration, and AI ethics",
-    ],
-    skills: ["Agentic AI", "Machine Learning", "Python", "LLMs", "IBM Watson"],
-    color: "from-blue-500 to-cyan-500",
-    borderColor: "border-blue-500/30",
-    bgColor: "bg-blue-500/5",
-    iconColor: "text-blue-400",
-    badgeBg: "bg-blue-500/10 text-blue-300 border-blue-500/20",
-    logo: "🤖",
-  },
-];
+import { useRef } from "react";
+import { 
+  Briefcase, 
+  GraduationCap, 
+  Calendar, 
+  MapPin, 
+  Cpu, 
+  Award, 
+  CheckCircle2, 
+  ChevronRight,
+  Sparkles
+} from "lucide-react";
 
 export default function Experience() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section id="experience" ref={sectionRef} className="relative py-28 px-4 sm:px-6 bg-white/1">
+    <section id="experience" ref={sectionRef} className="relative py-28 px-4 sm:px-6 bg-transparent overflow-hidden">
+      {/* Subtle background glow */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-        <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent" />
       </div>
 
-      <div className="max-w-5xl mx-auto">
-        <div className="experience-fade mb-16 text-center">
-          <span className="text-primary text-sm font-mono tracking-widest uppercase">Experience</span>
-          <h2 className="mt-3 text-4xl sm:text-5xl font-bold">
-            Work <span className="gradient-text">Experience</span>
+      <div className="max-w-5xl mx-auto relative z-10">
+        {/* Header */}
+        <div className="experience-fade mb-20 text-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-600 text-xs font-mono tracking-wider uppercase font-bold mb-4 shadow-2xs">
+            <Briefcase className="w-3.5 h-3.5" />
+            <span>Career & Education Tree</span>
+          </div>
+          <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
+            Work <span className="text-blue-600">Experience</span>
           </h2>
-          <div className="mt-4 w-16 h-1 rounded-full bg-gradient-to-r from-primary to-accent mx-auto" />
+          <div className="mt-4 w-20 h-1 rounded-full bg-blue-600 mx-auto" />
         </div>
 
+        {/* Tree Timeline Container */}
         <div className="relative">
-          {/* Timeline vertical line */}
-          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 timeline-line hidden sm:block" style={{ transform: "translateX(-50%)" }} />
+          {/* Vertical Tree Spine Line (Pure Slate/Black) */}
+          <div 
+            className="absolute left-6 md:left-1/2 top-4 bottom-4 w-1 bg-slate-900 rounded-full hidden sm:block shadow-[0_0_8px_rgba(15,23,42,0.15)]" 
+            style={{ transform: "translateX(-50%)" }} 
+          />
 
-          {experiences.map((exp, i) => (
-            <div
-              key={exp.company}
-              className="experience-fade relative mb-8 sm:mb-0"
-              style={{ transitionDelay: `${i * 100}ms` }}
-            >
-              {/* Timeline dot */}
-              <div className="hidden sm:flex absolute left-1/2 top-8 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-primary bg-background z-10" />
+          {/* NODE 1: Work Experience (Right branch on desktop, Left branch on mobile) */}
+          <div className="experience-fade relative mb-14 sm:mb-20">
+            {/* Glowing Tree Node Dot */}
+            <div className="hidden sm:flex absolute left-1/2 top-10 -translate-x-1/2 w-6 h-6 rounded-full border-4 border-blue-600 bg-white shadow-[0_0_15px_rgba(37,99,235,0.4)] z-20 items-center justify-center">
+              <div className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-ping" />
+            </div>
 
-              <div className="sm:w-1/2 sm:ml-auto sm:pl-12 md:pl-12">
-                <div
-                  className={`glass rounded-2xl p-6 sm:p-8 border ${exp.borderColor} ${exp.bgColor} hover:border-opacity-80 transition-all duration-300 group project-card`}
-                  data-testid={`experience-card-${i}`}
-                >
-                  {/* Header row */}
-                  <div className="flex items-start gap-4 mb-5">
-                    <div className={`w-12 h-12 rounded-xl ${exp.bgColor} border ${exp.borderColor} flex items-center justify-center text-2xl shrink-0`}>
-                      {exp.logo}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-wrap items-center gap-2 mb-1">
-                        <span className={`text-xs px-2.5 py-1 rounded-lg border font-medium ${exp.badgeBg}`}>
-                          {exp.type}
-                        </span>
-                        <span className={`text-xs px-2.5 py-1 rounded-lg border font-medium bg-green-400/10 text-green-300 border-green-400/20`}>
-                          Completed
-                        </span>
-                      </div>
-                      <h3 className="text-lg font-bold text-foreground">{exp.role}</h3>
-                      <div className={`text-base font-semibold bg-gradient-to-r ${exp.color} bg-clip-text text-transparent`}>
-                        {exp.company}
-                      </div>
+            {/* Card Content (Right Side) */}
+            <div className="sm:w-1/2 sm:ml-auto sm:pl-12 md:pl-16">
+              <div 
+                className="group relative bg-white/95 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-[0_15px_35px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_45px_rgba(37,99,235,0.12)] hover:border-blue-600 transition-all duration-300"
+                data-testid="experience-card-0"
+              >
+                {/* Header Row with 2-Color Emblem Box */}
+                <div className="flex items-start gap-4 mb-5">
+                  <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                    <div className="relative">
+                      <Cpu className="w-7 h-7 text-blue-600" />
+                      <Sparkles className="w-3.5 h-3.5 text-blue-600 absolute -top-1 -right-1" />
                     </div>
                   </div>
-
-                  {/* Meta info */}
-                  <div className="flex flex-wrap gap-4 mb-5 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1.5">
-                      <Calendar className="w-4 h-4" />
-                      <span>{exp.period}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                      <span className="text-xs px-2.5 py-1 rounded-lg font-bold bg-blue-50 text-blue-600 border border-blue-200">
+                        Internship
+                      </span>
+                      <span className="text-xs px-2.5 py-1 rounded-lg font-bold bg-slate-900 text-white border border-slate-900 flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3 text-blue-400" />
+                        Completed
+                      </span>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                      <MapPin className="w-4 h-4" />
-                      <span>{exp.location}</span>
+                    <h3 className="text-xl font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">
+                      AI Summer Training Intern
+                    </h3>
+                    <div className="text-base font-bold text-blue-600">
+                      CSRBOX & IBM SkillsBuild
                     </div>
                   </div>
+                </div>
 
-                  {/* Description */}
-                  <p className="text-muted-foreground text-sm leading-relaxed mb-5">
-                    {exp.description}
-                  </p>
+                {/* Meta details */}
+                <div className="flex flex-wrap gap-4 mb-5 text-xs font-semibold text-slate-600 bg-slate-50/90 p-3 rounded-xl border border-slate-200/60">
+                  <div className="flex items-center gap-1.5">
+                    <Calendar className="w-4 h-4 text-blue-600" />
+                    <span>July – August 2025</span>
+                  </div>
+                  <span className="text-slate-300">|</span>
+                  <div className="flex items-center gap-1.5">
+                    <MapPin className="w-4 h-4 text-blue-600" />
+                    <span>Remote</span>
+                  </div>
+                </div>
 
-                  {/* Highlights */}
-                  <div className="space-y-2 mb-5">
-                    {exp.highlights.map((h, j) => (
-                      <div key={j} className="flex items-start gap-2 text-sm">
-                        <ChevronRight className={`w-4 h-4 mt-0.5 shrink-0 ${exp.iconColor}`} />
-                        <span className="text-muted-foreground">{h}</span>
+                <p className="text-slate-700 text-sm leading-relaxed mb-5 font-normal">
+                  Completed an intensive AI Summer Training program focused on <strong className="text-slate-900 font-semibold">Agentic AI systems</strong>. Worked with IBM SkillsBuild curriculum covering advanced AI concepts, machine learning pipelines, and intelligent agent architectures.
+                </p>
+
+                {/* Highlights */}
+                <div className="space-y-2.5 mb-6">
+                  {[
+                    "Trained on Agentic AI systems and autonomous agent frameworks",
+                    "Explored IBM SkillsBuild AI curriculum covering ML and deep learning",
+                    "Built end-to-end AI-powered mini-projects demonstrating agentic behavior",
+                    "Learned prompt engineering, LLM integration, and AI ethics"
+                  ].map((h, j) => (
+                    <div key={j} className="flex items-start gap-2.5 text-sm">
+                      <div className="w-5 h-5 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5 border border-blue-200/60">
+                        <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
                       </div>
-                    ))}
-                  </div>
+                      <span className="text-slate-800 font-medium leading-snug">{h}</span>
+                    </div>
+                  ))}
+                </div>
 
-                  {/* Skills used */}
-                  <div className="flex flex-wrap gap-2 pt-4 border-t border-white/5">
-                    {exp.skills.map((skill) => (
+                {/* Skills chips */}
+                <div className="pt-4 border-t border-slate-100">
+                  <div className="flex flex-wrap gap-2">
+                    {["Agentic AI", "Machine Learning", "Python", "LLMs", "IBM Watson"].map((skill) => (
                       <span
                         key={skill}
-                        className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/8 text-xs text-muted-foreground"
+                        className="px-3 py-1 rounded-lg bg-slate-100 border border-slate-200/80 text-xs font-bold text-slate-800 hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all"
                       >
                         {skill}
                       </span>
@@ -126,56 +130,76 @@ export default function Experience() {
                 </div>
               </div>
             </div>
-          ))}
+          </div>
 
-          {/* Education card alongside */}
-          <div className="experience-fade mt-8 sm:mt-6">
-            <div className="sm:w-1/2 sm:pr-12">
-              <div className="glass rounded-2xl p-6 sm:p-8 border border-accent/20 bg-accent/5 hover:border-accent/40 transition-all duration-300 project-card" data-testid="education-card">
+          {/* NODE 2: Education (Left branch on desktop) */}
+          <div className="experience-fade relative">
+            {/* Glowing Tree Node Dot */}
+            <div className="hidden sm:flex absolute left-1/2 top-10 -translate-x-1/2 w-6 h-6 rounded-full border-4 border-blue-600 bg-white shadow-[0_0_15px_rgba(37,99,235,0.4)] z-20 items-center justify-center">
+              <div className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-ping" />
+            </div>
+
+            {/* Card Content (Left Side on Desktop) */}
+            <div className="sm:w-1/2 sm:pr-12 md:pr-16">
+              <div 
+                className="group relative bg-white/95 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-[0_15px_35px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_45px_rgba(37,99,235,0.12)] hover:border-blue-600 transition-all duration-300" 
+                data-testid="education-card"
+              >
+                {/* Header Row with 2-Color Academic Emblem */}
                 <div className="flex items-start gap-4 mb-5">
-                  <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-2xl shrink-0">
-                    🎓
+                  <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                    <GraduationCap className="w-7 h-7 text-blue-600" />
                   </div>
-                  <div>
-                    <span className="text-xs px-2.5 py-1 rounded-lg border bg-accent/10 text-purple-300 border-accent/20 font-medium">
-                      Education
-                    </span>
-                    <h3 className="mt-1 text-lg font-bold text-foreground">B.Tech CSE</h3>
-                    <div className="text-base font-semibold gradient-text-warm">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                      <span className="text-xs px-2.5 py-1 rounded-lg font-bold bg-blue-50 text-blue-600 border border-blue-200">
+                        Education
+                      </span>
+                      <span className="text-xs px-2.5 py-1 rounded-lg font-bold bg-slate-900 text-white border border-slate-900 flex items-center gap-1">
+                        <Award className="w-3.5 h-3.5 text-blue-400" />
+                        CGPA: 8.67
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">
+                      B.Tech in CSE
+                    </h3>
+                    <div className="text-base font-bold text-blue-600">
                       HMR Institute of Technology & Management
                     </div>
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-4 mb-4 text-sm text-muted-foreground">
+                {/* Meta details */}
+                <div className="flex flex-wrap gap-4 mb-5 text-xs font-semibold text-slate-600 bg-slate-50/90 p-3 rounded-xl border border-slate-200/60">
                   <div className="flex items-center gap-1.5">
-                    <Calendar className="w-4 h-4" />
-                    <span>CGPA: 8.5+</span>
-                    <br />
-                    <span>(2023 – 2027)</span>
+                    <Calendar className="w-4 h-4 text-blue-600" />
+                    <span>2023 - 2027</span>
                   </div>
+                  <span className="text-slate-300">|</span>
                   <div className="flex items-center gap-1.5">
-                    <MapPin className="w-4 h-4" />
+                    <MapPin className="w-4 h-4 text-blue-600" />
                     <span>Delhi, India (GGSIPU)</span>
                   </div>
                 </div>
 
-                <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-                  Currently pursuing B.Tech in Computer Science & Engineering with focus on data structures,
-                  algorithms, operating systems, and computer networks. Actively participating in college
-                  technical events and national hackathons.
+                <p className="text-slate-700 text-sm leading-relaxed mb-5 font-normal">
+                  Currently pursuing B.Tech in Computer Science & Engineering with strong focus on core system fundamentals, data structures, algorithms, operating systems, and full-stack web applications.
                 </p>
 
-                <div className="flex flex-wrap gap-2 pt-4 border-t border-white/5">
-                  {["Data Structures", "Algorithms", "OS", "DBMS", "Computer Networks", "OOP"].map((subj) => (
-                    <span key={subj} className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/8 text-xs text-muted-foreground">
-                      {subj}
-                    </span>
-                  ))}
+                {/* Subject chips */}
+                <div className="pt-4 border-t border-slate-100">
+                  <div className="flex flex-wrap gap-2">
+                    {["Data Structures", "Algorithms", "OS", "DBMS", "Computer Networks", "OOP"].map((subj) => (
+                      <span key={subj} className="px-3 py-1 rounded-lg bg-slate-100 border border-slate-200/80 text-xs font-bold text-slate-800 hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all">
+                        {subj}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>

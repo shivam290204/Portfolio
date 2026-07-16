@@ -30,23 +30,21 @@ export default function Skills() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section id="skills" ref={sectionRef} className="relative py-28 px-4 sm:px-6 bg-white/1 overflow-hidden">
+    <section id="skills" ref={sectionRef} className="relative py-28 px-4 sm:px-6 bg-transparent overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-        <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent" />
         {/* Decorative background blurs */}
-        <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[100px] -translate-y-1/2" />
-        <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-[100px] -translate-y-1/2" />
+        <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] -translate-y-1/2" />
+        <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[100px] -translate-y-1/2" />
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="skill-fade mb-20 text-center">
-          <span className="text-primary text-sm font-mono tracking-widest uppercase">Tech Stack</span>
-          <h2 className="mt-3 text-4xl sm:text-5xl font-bold">
+          <span className="text-blue-600 text-sm font-mono tracking-widest uppercase font-semibold">Tech Stack</span>
+          <h2 className="mt-3 text-4xl sm:text-5xl font-extrabold text-slate-900">
             My <span className="gradient-text">Arsenal</span>
           </h2>
           <div className="mt-4 w-16 h-1 rounded-full bg-gradient-to-r from-primary to-accent mx-auto" />
-          <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
+          <p className="mt-4 text-slate-600 max-w-xl mx-auto text-base sm:text-lg">
             The core tools and technologies I use to bring ideas to life.
           </p>
         </div>
@@ -65,19 +63,19 @@ export default function Skills() {
               <div 
                 className={`
                   relative flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 
-                  rounded-2xl glass-dark border border-white/5 
+                  rounded-2xl bg-white/80 backdrop-blur-md border border-slate-200 shadow-sm 
                   transition-all duration-300 ease-out cursor-pointer
-                  hover:scale-110 hover:-translate-y-2 hover:bg-white/5 hover:border-white/20
+                  hover:scale-110 hover:-translate-y-2 hover:bg-white hover:border-blue-300 hover:shadow-md
                   ${skill.color}
                 `}
               >
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <skill.icon className="w-10 h-10 sm:w-12 sm:h-12 text-muted-foreground/50 transition-all duration-300 group-hover:text-inherit" />
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <skill.icon className="w-10 h-10 sm:w-12 sm:h-12 text-slate-400 transition-all duration-300 group-hover:text-inherit" />
               </div>
 
               {/* Minimal Tooltip on Hover */}
-              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-lg bg-background/90 border border-white/10 backdrop-blur-md opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none z-20 whitespace-nowrap">
-                <span className="text-xs font-medium text-foreground">{skill.name}</span>
+              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-lg bg-slate-900 text-white border border-slate-800 shadow-lg opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none z-20 whitespace-nowrap">
+                <span className="text-xs font-semibold">{skill.name}</span>
               </div>
             </div>
           ))}
