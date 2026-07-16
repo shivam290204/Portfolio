@@ -2,29 +2,28 @@ import { useEffect, useRef } from "react";
 import { ExternalLink, Github } from "lucide-react";
 
 
-// Using the exact content as requested, but adding the newly generated mockup images.
+// Portfolio projects updated with the requested GitHub repositories.
 const projects = [
   {
-    title: "Smart FloodWatch",
-    description: "Real-time flood monitoring system with interactive geospatial visualization using Leaflet API. Aggregates data from multiple sources to provide live flood risk assessments and alerts, improving emergency response efficiency.",
-    techStack: ["React.js", "Node.js", "Leaflet API", "Express.js", "REST APIs"],
-    github: "https://github.com/shivam290204/smart_floodwatch",
-    link: "https://smart-floodwatch-git-main-shivam-1494s-projects.vercel.app/",
+    title: "NoobSyte Learning Platform",
+    description: "A production-grade MERN learning platform for beginner-friendly Java and DSA education, with interactive lesson paths, quiz tracking, and a scalable React/Express/Mongo architecture.",
+    techStack: ["React", "Node.js", "Express", "MongoDB", "Vite"],
+    github: "https://github.com/shivam290204/LearningPlatform",
     image: "/project1.png",
   },
   {
-    title: "Business Support Portal",
-    description: "Responsive enterprise platform with clean modular architecture supporting multiple business workflows. Optimized component lifecycle management to minimize unnecessary re-renders and boost performance.",
-    techStack: ["React.js", "HTML5", "CSS3", "JavaScript", "ES6+"],
+    title: "Government Business Support Portal",
+    description: "A polished Next.js App Router portal that simulates government business support workflows with Clerk authentication, responsive Tailwind UI, and an H2-backed unified backend.",
+    techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Clerk Auth", "Spring Boot"],
     github: "https://github.com/shivam290204/---government-website-clone-updated-version",
-    link: "https://government-website-clone-updated-ve.vercel.app/",
+    demo: "https://government-website-clone-updated-ve.vercel.app/",
     image: "/project2.png",
   },
   {
-    title: "Research Assistant",
-    description: "Full-stack AI-powered research assistant enabling real-time text summarization, paraphrasing, and analysis. Integrates Gemini API with a Spring Boot backend to generate intelligent responses, alongside a Chrome Extension for seamless user interaction and instant content processing directly from web pages.",
-    techStack: ["Java", "Spring Boot", "Chrome Extension", "Gemini API", "REST APIs"],
-    github: "https://github.com/shivam290204/research-assistant",
+    title: "CodeSync Collaborative IDE",
+    description: "A real-time collaborative developer workspace with Monaco Editor, Yjs CRDT sync, live chat, and a Spring Boot WebSocket relay backend for seamless multi-user editing.",
+    techStack: ["Next.js", "TypeScript", "Monaco Editor", "Yjs", "Spring Boot"],
+    github: "https://github.com/shivam290204/codesync",
     image: "/project3.png",
   },
 ];
@@ -112,7 +111,7 @@ export default function Projects() {
                   </ul>
 
                   <div
-                    className={`flex items-center gap-5 ${
+                    className={`flex flex-wrap items-center gap-4 ${
                       isEven ? "md:justify-end" : "md:justify-start"
                     }`}
                   >
@@ -120,20 +119,22 @@ export default function Projects() {
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-muted-foreground hover:text-primary transition-all hover:-translate-y-1"
+                      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-muted-foreground hover:border-primary/30 hover:bg-primary/10 hover:text-primary transition-all duration-200"
                       aria-label="GitHub Link"
                     >
-                      <Github className="w-5 h-5 sm:w-6 sm:h-6" />
+                      <Github className="w-4 h-4" />
+                      GitHub
                     </a>
-                    {project.link && (
+                    {project.demo && (
                       <a
-                        href={project.link}
+                        href={project.demo}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-muted-foreground hover:text-primary transition-all hover:-translate-y-1 "
-                        aria-label="External Link"
+                        className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-primary hover:border-primary/40 hover:bg-primary/20 transition-all duration-200"
+                        aria-label="Live Demo Link"
                       >
-                        <ExternalLink className="w-5 h-5 sm:w-6 sm:h-6" />
+                        <ExternalLink className="w-4 h-4" />
+                        Live Demo
                       </a>
                     )}
                   </div>

@@ -120,7 +120,7 @@ export default function Hero() {
             <div className="p-5 sm:p-6">
               <p className="text-white/70 text-base sm:text-lg leading-relaxed font-light">
                 <span className="text-blue-500 font-mono mr-2">{">"}</span>
-                3rd-year CSE student (CGPA: <span className="text-white font-medium">8.5+</span>) at <span className="text-white font-medium">HMR Institute of Technology & Management</span>, GGSIPU Delhi — building scalable full-stack applications and exploring AI.
+                4th-year CSE student (CGPA: <span className="text-white font-medium">8.67</span>) at <span className="text-white font-medium">HMR Institute of Technology & Management</span>, GGSIPU Delhi — building scalable full-stack applications and exploring AI.
               </p>
             </div>
           </div>

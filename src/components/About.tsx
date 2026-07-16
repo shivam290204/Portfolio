@@ -27,15 +27,16 @@ export default function About() {
       content: (
         <div className="flex flex-col gap-4 w-full justify-center h-full">
           <div>
-            <div className="text-5xl font-black mb-1 drop-shadow-sm">200+</div>
-            <div className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-80">Problems Solved</div>
+            <div className="text-5xl font-black mb-1 drop-shadow-sm">500+</div>
+            <div className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-80">DSA Problems Solved</div>
           </div>
           <div>
-            <div className="text-5xl font-black mb-1 drop-shadow-sm">3+</div>
-            <div className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-80">Full-Stack Projects</div>
+            <div className="text-5xl font-black mb-1 drop-shadow-sm">1490</div>
+            <div className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-80">LeetCode Contest Rating</div>
           </div>
+          
           <p className="text-xs font-semibold opacity-90 mt-2 leading-relaxed">
-            Architecting scalable systems and turning complex algorithms into high-performance solutions.
+            Building strong algorithmic foundations and competitive problem-solving skills.
           </p>
         </div>
       )
@@ -75,6 +76,29 @@ export default function About() {
           </div>
           <p className="text-xs font-semibold opacity-90 mt-2 leading-relaxed">
             Transforming theoretical AI and software engineering knowledge into real-world, award-winning projects.
+          </p>
+        </div>
+      )
+    },
+    {
+      id: "competitive",
+      color: "bg-[#0EA5E9]", // Bright Sky Blue
+      textColor: "text-white",
+      title: "Competitive",
+      icon: <MousePointerClick className="w-8 h-8 opacity-90 mb-4" />,
+      content: (
+        <div className="flex flex-col gap-4 w-full justify-center h-full">
+         
+          <div>
+            <div className="text-3xl font-black drop-shadow-sm mb-1">1100</div>
+            <div className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-80">Global Rank on GfG</div>
+          </div>
+          <div>
+            <div className="text-3xl font-black drop-shadow-sm mb-1">50k</div>
+            <div className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-80">GATE Rank</div>
+          </div>
+          <p className="text-xs font-semibold opacity-90 mt-2 leading-relaxed">
+            Consistent competitive performance across algorithmic contests, ranking, and coding challenge milestones.
           </p>
         </div>
       )
@@ -152,8 +176,9 @@ export default function About() {
           const spreadX = (index - 1.5) * 270;
           const spreadY = Math.abs(index - 1.5) * 30;
           const spreadRotate = (index - 1.5) * 6;
+          const deckOffsetX = -120;
           
-          const openedTransform = `translate(${spreadX}px, ${spreadY}px) rotate(${spreadRotate}deg)`;
+          const openedTransform = `translate(${spreadX + deckOffsetX}px, ${spreadY}px) rotate(${spreadRotate}deg)`;
 
           return (
             <div
