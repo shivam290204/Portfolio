@@ -1,207 +1,471 @@
-import { useRef } from "react";
-import { 
-  Briefcase, 
-  GraduationCap, 
-  Calendar, 
-  MapPin, 
-  Cpu, 
-  Award, 
-  CheckCircle2, 
-  ChevronRight,
-  Sparkles
-} from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { GraduationCap, ExternalLink } from "lucide-react";
+import MinecraftSteveSprite from "@/components/MinecraftSteveSprite";
+
+export interface TimelineMilestone {
+  id: string;
+  section: "education" | "experience";
+  type: "milestone" | "minor";
+  pathPercent: number; // 0.0 to 1.0 along the continuous curve
+  headline?: string;
+  subheadline?: string;
+  metadata?: string;
+  blurb?: string;
+  skills?: string[];
+  photo?: {
+    src: string;
+    caption: string;
+    rotationClass: string;
+  };
+  layoutSide?: "left" | "right"; // Desktop layout: "left" = Text Left & Polaroid Right; "right" = Polaroid Left & Text Right
+}
+
+// Config object array so user can easily add/change entries later without touching layout code
+export const timelineData: TimelineMilestone[] = [
+  // SECTION 1: EDUCATION
+  {
+    id: "edu-1",
+    section: "education",
+    type: "milestone",
+    pathPercent: 0.12,
+    headline: "Class 10 – Guru Tegh Bahadur Public School",
+    metadata: "2020 · 70% CBSE",
+    photo: {
+      src: "/timeline-edu-1.jpg",
+      caption: "Class 10 · High School Foundation",
+      rotationClass: "-rotate-2"
+    },
+    layoutSide: "left"
+  },
+  {
+    id: "edu-minor-1",
+    section: "education",
+    type: "minor",
+    pathPercent: 0.23
+  },
+  {
+    id: "edu-2",
+    section: "education",
+    type: "milestone",
+    pathPercent: 0.35,
+    headline: "Class 12 – Guru Tegh Bahadur Public School",
+    metadata: "2022 · 76% CBSE",
+    photo: {
+      src: "/timeline-edu-2.jpg",
+      caption: "Class 12 · Senior Secondary",
+      rotationClass: "rotate-2"
+    },
+    layoutSide: "right"
+  },
+  {
+    id: "edu-minor-2",
+    section: "education",
+    type: "minor",
+    pathPercent: 0.47
+  },
+  {
+    id: "edu-3",
+    section: "education",
+    type: "milestone",
+    pathPercent: 0.58,
+    headline: "B.Tech CSE – HMR Institute of Technology and Management",
+    subheadline: "(affiliated to Guru Gobind Singh Indraprastha University)",
+    metadata: "2023–2027 · 4th Semester · CGPA 8.67",
+    photo: {
+      src: "/photo.png",
+      caption: "B.Tech CSE · GGSIPU Campus Journey",
+      rotationClass: "-rotate-1"
+    },
+    layoutSide: "left"
+  },
+  {
+    id: "edu-minor-3",
+    section: "education",
+    type: "minor",
+    pathPercent: 0.69
+  },
+
+  // SECTION 2: WORK EXPERIENCE
+  {
+    id: "exp-1",
+    section: "experience",
+    type: "milestone",
+    pathPercent: 0.81,
+    headline: "AI Summer Training Intern – CSRBOX & IBM SkillsBuild",
+    metadata: "July 2025 – Aug 2025 · Remote",
+    blurb: "Trained on Agentic AI systems and autonomous agent frameworks. Explored IBM SkillsBuild AI curriculum covering ML and deep learning, built end-to-end AI-powered mini-projects demonstrating agentic behavior, and mastered prompt engineering, LLM integration, and AI ethics.",
+    skills: ["Agentic AI", "Machine Learning", "Python", "LLMs"],
+    photo: {
+      src: "/ibm-skillsbuild.png",
+      caption: "IBM SkillsBuild · AI Agentic Systems",
+      rotationClass: "rotate-2"
+    },
+    layoutSide: "right"
+  },
+  {
+    id: "exp-minor-1",
+    section: "experience",
+    type: "minor",
+    pathPercent: 0.93
+  }
+];
 
 export default function Experience() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const pathRef = useRef<SVGPathElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [pathPoints, setPathPoints] = useState<Record<string, { x: number; y: number }>>({});
+  const [stevePos, setStevePos] = useState<{ x: number; y: number; flip: boolean }>({
+    x: 500,
+    y: 0,
+    flip: false
+  });
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  const viewBoxWidth = isMobile ? 400 : 1000;
+  const viewBoxHeight = isMobile ? 3200 : 2700;
+
+  // Check window size for responsive curve choice
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Compute exact (x, y) for each milestone once path mounts/changes
+  useEffect(() => {
+    if (!pathRef.current) return;
+    const path = pathRef.current;
+    const totalLen = path.getTotalLength();
+    if (totalLen === 0) return;
+
+    const newPoints: Record<string, { x: number; y: number }> = {};
+    timelineData.forEach((item) => {
+      const pt = path.getPointAtLength(item.pathPercent * totalLen);
+      newPoints[item.id] = { x: pt.x, y: pt.y };
+    });
+    setPathPoints(newPoints);
+  }, [isMobile]);
+
+  // Scroll-linked animation for Minecraft Steve sprite
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!containerRef.current || !pathRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const windowH = window.innerHeight;
+
+      // Scroll progress 0.0 at container top reaching upper mid viewport, 1.0 at bottom
+      const startTrigger = windowH * 0.65;
+      const endTrigger = -rect.height + windowH * 0.35;
+      const rawProgress = (startTrigger - rect.top) / (startTrigger - endTrigger);
+      const progress = Math.max(0, Math.min(1, rawProgress));
+
+      const path = pathRef.current;
+      const totalLen = path.getTotalLength();
+      if (totalLen === 0) return;
+
+      const currentPt = path.getPointAtLength(progress * totalLen);
+      const nextPt = path.getPointAtLength(Math.min(totalLen, (progress + 0.006) * totalLen));
+      const dx = nextPt.x - currentPt.x;
+
+      setStevePos({
+        x: currentPt.x,
+        y: currentPt.y,
+        flip: dx < -0.3
+      });
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isMobile]);
+
+  // SVG curved path definition:
+  // Desktop: gentle snaking curve left & right down the center
+  // Mobile: simpler vertical snaking path along the left column (X = 60 to 90)
+  const desktopPath = "M 500 0 C 320 200, 320 450, 420 580 C 520 710, 680 820, 640 1020 C 600 1220, 320 1350, 420 1580 C 520 1810, 680 1950, 620 2180 C 560 2410, 380 2550, 500 2700";
+  const mobilePath = "M 65 0 C 45 300, 95 600, 65 900 C 35 1200, 95 1500, 65 1800 C 35 2100, 95 2400, 65 2700 C 45 2950, 75 3100, 65 3200";
+  const currentPathD = isMobile ? mobilePath : desktopPath;
 
   return (
-    <section id="experience" ref={sectionRef} className="relative py-28 px-4 sm:px-6 bg-transparent overflow-hidden">
-      {/* Subtle background glow */}
-      <div className="absolute inset-0 pointer-events-none">
+    <section 
+      id="experience" 
+      ref={containerRef}
+      className="relative pt-8 pb-28 px-4 sm:px-6 bg-transparent text-slate-900 overflow-hidden select-none font-sans"
+    >
+
+      {/* SECTION 1 HEADER: EDUCATION */}
+      <div id="education" className="max-w-6xl mx-auto text-center relative z-20 mb-12 sm:mb-20 pt-4">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-slate-300 shadow-xs text-slate-700 text-xs font-mono tracking-widest uppercase font-bold mb-3">
+          <GraduationCap className="w-4 h-4 text-amber-600" />
+          <span>Academic Foundation</span>
+        </div>
+        <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl text-slate-900 font-normal tracking-tight">
+          Education & Experience
+        </h2>
       </div>
 
-      <div className="max-w-5xl mx-auto relative z-10">
-        {/* Header */}
-        <div className="experience-fade mb-20 text-center">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-600 text-xs font-mono tracking-wider uppercase font-bold mb-4 shadow-2xs">
-            <Briefcase className="w-3.5 h-3.5" />
-            <span>Career & Education Tree</span>
-          </div>
-          <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
-            Work <span className="text-blue-600">Experience</span>
-          </h2>
-          <div className="mt-4 w-20 h-1 rounded-full bg-blue-600 mx-auto" />
-        </div>
-
-        {/* Tree Timeline Container */}
-        <div className="relative">
-          {/* Vertical Tree Spine Line (Pure Slate/Black) */}
-          <div 
-            className="absolute left-6 md:left-1/2 top-4 bottom-4 w-1 bg-slate-900 rounded-full hidden sm:block shadow-[0_0_8px_rgba(15,23,42,0.15)]" 
-            style={{ transform: "translateX(-50%)" }} 
+      {/* TIMELINE CURVE & CONTENT WRAPPER */}
+      <div className="max-w-6xl mx-auto relative min-h-[3200px] md:min-h-[2700px] z-10">
+        {/* SVG Bezier Curve */}
+        <svg
+          viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
+          className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible"
+          preserveAspectRatio="none"
+        >
+          {/* Subtle background shadow line */}
+          <path
+            d={currentPathD}
+            fill="none"
+            stroke="rgba(0,0,0,0.06)"
+            strokeWidth={isMobile ? 3 : 4}
+            strokeLinecap="round"
           />
+          {/* Main snaking timeline path */}
+          <path
+            ref={pathRef}
+            d={currentPathD}
+            fill="none"
+            stroke="#334155"
+            strokeWidth={isMobile ? 2 : 2.5}
+            strokeLinecap="round"
+          />
+        </svg>
 
-          {/* NODE 1: Work Experience (Right branch on desktop, Left branch on mobile) */}
-          <div className="experience-fade relative mb-14 sm:mb-20">
-            {/* Glowing Tree Node Dot */}
-            <div className="hidden sm:flex absolute left-1/2 top-10 -translate-x-1/2 w-6 h-6 rounded-full border-4 border-blue-600 bg-white shadow-[0_0_15px_rgba(37,99,235,0.4)] z-20 items-center justify-center">
-              <div className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-ping" />
-            </div>
-
-            {/* Card Content (Right Side) */}
-            <div className="sm:w-1/2 sm:ml-auto sm:pl-12 md:pl-16">
-              <div 
-                className="group relative bg-white/95 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-[0_15px_35px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_45px_rgba(37,99,235,0.12)] hover:border-blue-600 transition-all duration-300"
-                data-testid="experience-card-0"
-              >
-                {/* Header Row with 2-Color Emblem Box */}
-                <div className="flex items-start gap-4 mb-5">
-                  <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
-                    <div className="relative">
-                      <Cpu className="w-7 h-7 text-blue-600" />
-                      <Sparkles className="w-3.5 h-3.5 text-blue-600 absolute -top-1 -right-1" />
-                    </div>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                      <span className="text-xs px-2.5 py-1 rounded-lg font-bold bg-blue-50 text-blue-600 border border-blue-200">
-                        Internship
-                      </span>
-                      <span className="text-xs px-2.5 py-1 rounded-lg font-bold bg-slate-900 text-white border border-slate-900 flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3 text-blue-400" />
-                        Completed
-                      </span>
-                    </div>
-                    <h3 className="text-xl font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">
-                      AI Summer Training Intern
-                    </h3>
-                    <div className="text-base font-bold text-blue-600">
-                      CSRBOX & IBM SkillsBuild
-                    </div>
-                  </div>
-                </div>
-
-                {/* Meta details */}
-                <div className="flex flex-wrap gap-4 mb-5 text-xs font-semibold text-slate-600 bg-slate-50/90 p-3 rounded-xl border border-slate-200/60">
-                  <div className="flex items-center gap-1.5">
-                    <Calendar className="w-4 h-4 text-blue-600" />
-                    <span>July – August 2025</span>
-                  </div>
-                  <span className="text-slate-300">|</span>
-                  <div className="flex items-center gap-1.5">
-                    <MapPin className="w-4 h-4 text-blue-600" />
-                    <span>Remote</span>
-                  </div>
-                </div>
-
-                <p className="text-slate-700 text-sm leading-relaxed mb-5 font-normal">
-                  Completed an intensive AI Summer Training program focused on <strong className="text-slate-900 font-semibold">Agentic AI systems</strong>. Worked with IBM SkillsBuild curriculum covering advanced AI concepts, machine learning pipelines, and intelligent agent architectures.
-                </p>
-
-                {/* Highlights */}
-                <div className="space-y-2.5 mb-6">
-                  {[
-                    "Trained on Agentic AI systems and autonomous agent frameworks",
-                    "Explored IBM SkillsBuild AI curriculum covering ML and deep learning",
-                    "Built end-to-end AI-powered mini-projects demonstrating agentic behavior",
-                    "Learned prompt engineering, LLM integration, and AI ethics"
-                  ].map((h, j) => (
-                    <div key={j} className="flex items-start gap-2.5 text-sm">
-                      <div className="w-5 h-5 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5 border border-blue-200/60">
-                        <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
-                      </div>
-                      <span className="text-slate-800 font-medium leading-snug">{h}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Skills chips */}
-                <div className="pt-4 border-t border-slate-100">
-                  <div className="flex flex-wrap gap-2">
-                    {["Agentic AI", "Machine Learning", "Python", "LLMs", "IBM Watson"].map((skill) => (
-                      <span
-                        key={skill}
-                        className="px-3 py-1 rounded-lg bg-slate-100 border border-slate-200/80 text-xs font-bold text-slate-800 hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* NODE 2: Education (Left branch on desktop) */}
-          <div className="experience-fade relative">
-            {/* Glowing Tree Node Dot */}
-            <div className="hidden sm:flex absolute left-1/2 top-10 -translate-x-1/2 w-6 h-6 rounded-full border-4 border-blue-600 bg-white shadow-[0_0_15px_rgba(37,99,235,0.4)] z-20 items-center justify-center">
-              <div className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-ping" />
-            </div>
-
-            {/* Card Content (Left Side on Desktop) */}
-            <div className="sm:w-1/2 sm:pr-12 md:pr-16">
-              <div 
-                className="group relative bg-white/95 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-[0_15px_35px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_45px_rgba(37,99,235,0.12)] hover:border-blue-600 transition-all duration-300" 
-                data-testid="education-card"
-              >
-                {/* Header Row with 2-Color Academic Emblem */}
-                <div className="flex items-start gap-4 mb-5">
-                  <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
-                    <GraduationCap className="w-7 h-7 text-blue-600" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                      <span className="text-xs px-2.5 py-1 rounded-lg font-bold bg-blue-50 text-blue-600 border border-blue-200">
-                        Education
-                      </span>
-                      <span className="text-xs px-2.5 py-1 rounded-lg font-bold bg-slate-900 text-white border border-slate-900 flex items-center gap-1">
-                        <Award className="w-3.5 h-3.5 text-blue-400" />
-                        CGPA: 8.67
-                      </span>
-                    </div>
-                    <h3 className="text-xl font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">
-                      B.Tech in CSE
-                    </h3>
-                    <div className="text-base font-bold text-blue-600">
-                      HMR Institute of Technology & Management
-                    </div>
-                  </div>
-                </div>
-
-                {/* Meta details */}
-                <div className="flex flex-wrap gap-4 mb-5 text-xs font-semibold text-slate-600 bg-slate-50/90 p-3 rounded-xl border border-slate-200/60">
-                  <div className="flex items-center gap-1.5">
-                    <Calendar className="w-4 h-4 text-blue-600" />
-                    <span>2023 - 2027</span>
-                  </div>
-                  <span className="text-slate-300">|</span>
-                  <div className="flex items-center gap-1.5">
-                    <MapPin className="w-4 h-4 text-blue-600" />
-                    <span>Delhi, India (GGSIPU)</span>
-                  </div>
-                </div>
-
-                <p className="text-slate-700 text-sm leading-relaxed mb-5 font-normal">
-                  Currently pursuing B.Tech in Computer Science & Engineering with strong focus on core system fundamentals, data structures, algorithms, operating systems, and full-stack web applications.
-                </p>
-
-                {/* Subject chips */}
-                <div className="pt-4 border-t border-slate-100">
-                  <div className="flex flex-wrap gap-2">
-                    {["Data Structures", "Algorithms", "OS", "DBMS", "Computer Networks", "OOP"].map((subj) => (
-                      <span key={subj} className="px-3 py-1 rounded-lg bg-slate-100 border border-slate-200/80 text-xs font-bold text-slate-800 hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all">
-                        {subj}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
+        {/* MINECRAFT STEVE SPRITE (Scroll-Linked Articulated Walking Animation) */}
+        <div
+          className="absolute z-40 pointer-events-none transition-all duration-100 ease-out flex flex-col items-center"
+          style={{
+            left: `${(stevePos.x / viewBoxWidth) * 100}%`,
+            top: `${(stevePos.y / viewBoxHeight) * 100}%`,
+            transform: "translate(-50%, -85%)"
+          }}
+        >
+          <MinecraftSteveSprite
+            progress={scrollProgress}
+            flip={stevePos.flip}
+            className="w-12 h-16 sm:w-14 sm:h-20"
+          />
+          {/* Pixel shadow right beneath feet */}
+          <div className="w-6 h-1.5 bg-slate-900/30 rounded-full blur-[1px] -mt-1.5" />
         </div>
+
+        {/* WAYPOINTS & CONTENT BLOCKS */}
+        {timelineData.map((entry) => {
+          const pt = pathPoints[entry.id] || { x: viewBoxWidth * 0.5, y: entry.pathPercent * viewBoxHeight };
+          const leftPercent = (pt.x / viewBoxWidth) * 100;
+          const topPercent = (pt.y / viewBoxHeight) * 100;
+
+          // Minor Waypoints (Hollow gray dots for path rhythm)
+          if (entry.type === "minor") {
+            return (
+              <div
+                key={entry.id}
+                className="absolute z-20 pointer-events-none w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full bg-[#FAFAFA] border-2 border-slate-400 shadow-2xs -translate-x-1/2 -translate-y-1/2"
+                style={{ left: `${leftPercent}%`, top: `${topPercent}%` }}
+              />
+            );
+          }
+
+          // Milestone Waypoints (Filled gold dots + Polaroid/Text blocks)
+          const isLeftSide = entry.layoutSide === "left";
+
+          return (
+            <div key={entry.id} className="absolute inset-x-0" style={{ top: `${topPercent}%` }}>
+              {/* Yellow/Gold Milestone Dot on Curve */}
+              <div
+                className="absolute z-30 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#eab308] border-2 border-slate-900 shadow-[0_0_12px_rgba(234,179,8,0.6)] -translate-x-1/2 -translate-y-1/2 hover:scale-125 transition-transform cursor-pointer"
+                style={{ left: `${leftPercent}%` }}
+                title={entry.headline}
+              />
+
+              {/* DESKTOP LAYOUT (Alternating Left/Right) */}
+              <div className="hidden md:block">
+                {isLeftSide ? (
+                  <>
+                    {/* Serif Text Block on LEFT */}
+                    <div
+                      className="absolute right-[calc(100%-leftPercent%+3rem)] top-0 -translate-y-1/2 w-[42%] text-right pr-4"
+                      style={{ right: `${100 - leftPercent + 3.5}%` }}
+                    >
+                      <h3 className="font-serif text-2xl lg:text-3xl text-slate-900 font-normal tracking-tight leading-snug">
+                        {entry.headline}
+                      </h3>
+                      {entry.subheadline && (
+                        <p className="font-serif italic text-sm lg:text-base text-slate-700 mt-1">
+                          {entry.subheadline}
+                        </p>
+                      )}
+                      <span className="block font-mono text-xs uppercase tracking-[0.2em] text-slate-500 font-semibold mt-2.5">
+                        {entry.metadata}
+                      </span>
+                      {entry.blurb && (
+                        <p className="text-sm text-slate-600 font-light mt-3 leading-relaxed ml-auto max-w-md">
+                          {entry.blurb}
+                        </p>
+                      )}
+                      {entry.skills && (
+                        <div className="flex flex-wrap gap-1.5 mt-3.5 justify-end">
+                          {entry.skills.map((skill, i) => (
+                            <span
+                              key={i}
+                              className="px-2.5 py-1 text-[11px] font-mono tracking-wider uppercase font-semibold bg-slate-900 text-white rounded-full shadow-xs"
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Polaroid Photo on RIGHT */}
+                    {entry.photo && (
+                      <div
+                        className="absolute top-0 -translate-y-1/2 z-20"
+                        style={{ left: `${leftPercent + 3.5}%` }}
+                      >
+                        <div
+                          className={`bg-white p-3 pb-8 lg:p-4 lg:pb-10 shadow-[0_16px_35px_rgba(0,0,0,0.15)] rounded-2xs border border-slate-300/80 w-64 lg:w-72 transform ${entry.photo.rotationClass} hover:scale-105 hover:z-30 hover:shadow-[0_24px_48px_rgba(0,0,0,0.22)] transition-all duration-500 cursor-pointer group`}
+                        >
+                          <div className="overflow-hidden rounded-2xs bg-slate-100 aspect-[4/3] w-full flex items-center justify-center">
+                            <img
+                              src={entry.photo.src}
+                              alt={entry.headline}
+                              className={`w-full h-full ${entry.photo.src.includes("ibm") ? "object-contain p-4 bg-white" : "object-cover"} filter contrast-[1.03] group-hover:scale-105 transition-transform duration-700`}
+                            />
+                          </div>
+                          <p className="text-center font-mono text-[11px] lg:text-xs text-slate-500 uppercase tracking-widest mt-3 lg:mt-4 font-medium truncate px-1">
+                            {entry.photo.caption}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {/* Polaroid Photo on LEFT */}
+                    {entry.photo && (
+                      <div
+                        className="absolute top-0 -translate-y-1/2 z-20 flex justify-end"
+                        style={{ right: `${100 - leftPercent + 3.5}%` }}
+                      >
+                        <div
+                          className={`bg-white p-3 pb-8 lg:p-4 lg:pb-10 shadow-[0_16px_35px_rgba(0,0,0,0.15)] rounded-2xs border border-slate-300/80 w-64 lg:w-72 transform ${entry.photo.rotationClass} hover:scale-105 hover:z-30 hover:shadow-[0_24px_48px_rgba(0,0,0,0.22)] transition-all duration-500 cursor-pointer group`}
+                        >
+                          <div className="overflow-hidden rounded-2xs bg-slate-100 aspect-[4/3] w-full flex items-center justify-center">
+                            <img
+                              src={entry.photo.src}
+                              alt={entry.headline}
+                              className={`w-full h-full ${entry.photo.src.includes("ibm") ? "object-contain p-4 bg-white" : "object-cover"} filter contrast-[1.03] group-hover:scale-105 transition-transform duration-700`}
+                            />
+                          </div>
+                          <p className="text-center font-mono text-[11px] lg:text-xs text-slate-500 uppercase tracking-widest mt-3 lg:mt-4 font-medium truncate px-1">
+                            {entry.photo.caption}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Serif Text Block on RIGHT */}
+                    <div
+                      className="absolute top-0 -translate-y-1/2 w-[42%] text-left pl-4"
+                      style={{ left: `${leftPercent + 3.5}%` }}
+                    >
+                      <h3 className="font-serif text-2xl lg:text-3xl text-slate-900 font-normal tracking-tight leading-snug">
+                        {entry.headline}
+                      </h3>
+                      {entry.subheadline && (
+                        <p className="font-serif italic text-sm lg:text-base text-slate-700 mt-1">
+                          {entry.subheadline}
+                        </p>
+                      )}
+                      <span className="block font-mono text-xs uppercase tracking-[0.2em] text-slate-500 font-semibold mt-2.5">
+                        {entry.metadata}
+                      </span>
+                      {entry.blurb && (
+                        <p className="text-sm text-slate-600 font-light mt-3 leading-relaxed mr-auto max-w-md">
+                          {entry.blurb}
+                        </p>
+                      )}
+                      {entry.skills && (
+                        <div className="flex flex-wrap gap-1.5 mt-3.5 justify-start">
+                          {entry.skills.map((skill, i) => (
+                            <span
+                              key={i}
+                              className="px-2.5 py-1 text-[11px] font-mono tracking-wider uppercase font-semibold bg-slate-900 text-white rounded-full shadow-xs"
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* MOBILE LAYOUT (Single Column to right of curve at X=65px) */}
+              <div className="block md:hidden pl-24 pr-4 -translate-y-1/2">
+                <div className="space-y-4">
+                  <h3 className="font-serif text-xl sm:text-2xl text-slate-900 font-normal tracking-tight leading-snug">
+                    {entry.headline}
+                  </h3>
+                  {entry.subheadline && (
+                    <p className="font-serif italic text-xs sm:text-sm text-slate-700">
+                      {entry.subheadline}
+                    </p>
+                  )}
+                  <span className="block font-mono text-[11px] sm:text-xs uppercase tracking-[0.18em] text-slate-500 font-semibold">
+                    {entry.metadata}
+                  </span>
+                  {entry.blurb && (
+                    <p className="text-xs sm:text-sm text-slate-600 font-light leading-relaxed">
+                      {entry.blurb}
+                    </p>
+                  )}
+                  {entry.skills && (
+                    <div className="flex flex-wrap gap-1.5 mt-3">
+                      {entry.skills.map((skill, i) => (
+                        <span
+                          key={i}
+                          className="px-2 py-0.5 text-[10px] sm:text-[11px] font-mono tracking-wider uppercase font-semibold bg-slate-900 text-white rounded-full shadow-xs"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Polaroid below text on mobile */}
+                  {entry.photo && (
+                    <div className="pt-2">
+                      <div
+                        className={`bg-white p-2.5 pb-6 sm:p-3 sm:pb-8 shadow-lg rounded-2xs border border-slate-300/80 w-56 sm:w-64 transform ${entry.photo.rotationClass}`}
+                      >
+                        <div className="overflow-hidden rounded-2xs bg-slate-100 aspect-[4/3] w-full flex items-center justify-center">
+                          <img
+                            src={entry.photo.src}
+                            alt={entry.headline}
+                            className={`w-full h-full ${entry.photo.src.includes("ibm") ? "object-contain p-4 bg-white" : "object-cover"} filter contrast-[1.03]`}
+                          />
+                        </div>
+                        <p className="text-center font-mono text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-widest mt-2.5 font-medium truncate">
+                          {entry.photo.caption}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
 }
+

@@ -67,11 +67,11 @@ export default function About() {
             <div className="text-sm font-semibold opacity-90 leading-snug">Hackathon Participant</div>
           </div>
           <div>
-            <div className="text-2xl font-black drop-shadow-sm mb-1">IBM Certified</div>
-            <div className="text-sm font-semibold opacity-90 leading-snug">AI Summer Training</div>
+            <div className="text-2xl font-black drop-shadow-sm mb-1">TakeUForward</div>
+            <div className="text-sm font-semibold opacity-90 leading-snug">SDE Sheet - Striver Challenge</div>
           </div>
           <p className="text-xs font-semibold opacity-90 mt-2 leading-relaxed">
-            Transforming theoretical AI and software engineering knowledge into real-world, award-winning projects.
+            Successfully Completed DSA SDE Sheet and also Participated so many Hackathons like SIH.
           </p>
         </div>
       )

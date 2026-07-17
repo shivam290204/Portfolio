@@ -32,7 +32,7 @@ export default function Projects() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section id="projects" ref={sectionRef} className="relative py-28 px-4 sm:px-6 mb-10">
+    <section id="projects" ref={sectionRef} className="relative pt-28 pb-8 px-4 sm:px-6">
       <div className="max-w-3xl lg:max-w-4xl mx-auto">
         <div className="project-fade mb-24 md:mb-32 text-center md:text-left">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 flex items-center md:justify-start justify-center gap-4">
