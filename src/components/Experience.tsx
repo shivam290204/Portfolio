@@ -12,6 +12,10 @@ export interface TimelineMilestone {
   metadata?: string;
   blurb?: string;
   skills?: string[];
+  link?: {
+    url: string;
+    label: string;
+  };
   photo?: {
     src: string;
     caption: string;
@@ -27,7 +31,7 @@ export const timelineData: TimelineMilestone[] = [
     id: "edu-1",
     section: "education",
     type: "milestone",
-    pathPercent: 0.12,
+    pathPercent: 0.08,
     headline: "Class 10 – Guru Tegh Bahadur Public School",
     metadata: "2020 · 70% CBSE",
     photo: {
@@ -38,16 +42,10 @@ export const timelineData: TimelineMilestone[] = [
     layoutSide: "left"
   },
   {
-    id: "edu-minor-1",
-    section: "education",
-    type: "minor",
-    pathPercent: 0.23
-  },
-  {
     id: "edu-2",
     section: "education",
     type: "milestone",
-    pathPercent: 0.35,
+    pathPercent: 0.28,
     headline: "Class 12 – Guru Tegh Bahadur Public School",
     metadata: "2022 · 76% CBSE",
     photo: {
@@ -58,19 +56,13 @@ export const timelineData: TimelineMilestone[] = [
     layoutSide: "right"
   },
   {
-    id: "edu-minor-2",
-    section: "education",
-    type: "minor",
-    pathPercent: 0.47
-  },
-  {
     id: "edu-3",
     section: "education",
     type: "milestone",
-    pathPercent: 0.58,
+    pathPercent: 0.48,
     headline: "B.Tech CSE – HMR Institute of Technology and Management",
     subheadline: "(affiliated to Guru Gobind Singh Indraprastha University)",
-    metadata: "2023–2027 · 4th Semester · CGPA 8.67",
+    metadata: "2023–2027 · CGPA 8.67",
     photo: {
       src: "/photo.png",
       caption: "B.Tech CSE · GGSIPU Campus Journey",
@@ -78,19 +70,13 @@ export const timelineData: TimelineMilestone[] = [
     },
     layoutSide: "left"
   },
-  {
-    id: "edu-minor-3",
-    section: "education",
-    type: "minor",
-    pathPercent: 0.69
-  },
 
   // SECTION 2: WORK EXPERIENCE
   {
     id: "exp-1",
     section: "experience",
     type: "milestone",
-    pathPercent: 0.81,
+    pathPercent: 0.69,
     headline: "AI Summer Training Intern – CSRBOX & IBM SkillsBuild",
     metadata: "July 2025 – Aug 2025 · Remote",
     blurb: "Trained on Agentic AI systems and autonomous agent frameworks. Explored IBM SkillsBuild AI curriculum covering ML and deep learning, built end-to-end AI-powered mini-projects demonstrating agentic behavior, and mastered prompt engineering, LLM integration, and AI ethics.",
@@ -103,10 +89,25 @@ export const timelineData: TimelineMilestone[] = [
     layoutSide: "right"
   },
   {
-    id: "exp-minor-1",
+    id: "exp-2",
     section: "experience",
-    type: "minor",
-    pathPercent: 0.93
+    type: "milestone",
+    pathPercent: 0.89,
+    headline: "Software Engineer Intern – Vibhum Software Services Pvt. Ltd.",
+    subheadline: "Dracarys Voice AI Platform",
+    metadata: "2-Month Internship · AI & Voice Systems",
+    blurb: "Architected and built the Dracarys Voice AI Platform — an enterprise-grade omnichannel conversational voice agent framework. Implemented real-time media streaming pipelines with Pipecat (STT → LLM → TTS) supporting SIP/PSTN telephony and low-latency WebRTC, an asynchronous FastAPI backend with PostgreSQL, Redis queues (ARQ), S3 audio recording storage, and a Next.js 15 visual agent builder workspace.",
+    skills: ["Voice AI", "Pipecat", "FastAPI", "WebRTC", "Python", "Next.js", "Redis", "PostgreSQL"],
+    link: {
+      url: "https://github.com/shivam290204/Dracarys-VoiceAgent",
+      label: "View Dracarys-VoiceAgent"
+    },
+    photo: {
+      src: "/vibhum.png",
+      caption: "Vibhum Software · Dracarys Voice AI",
+      rotationClass: "-rotate-2"
+    },
+    layoutSide: "left"
   }
 ];
 
@@ -123,7 +124,7 @@ export default function Experience() {
   const [scrollProgress, setScrollProgress] = useState(0);
 
   const viewBoxWidth = isMobile ? 400 : 1000;
-  const viewBoxHeight = isMobile ? 3200 : 2700;
+  const viewBoxHeight = isMobile ? 3200 : 2600;
 
   // Check window size for responsive curve choice
   useEffect(() => {
@@ -185,10 +186,10 @@ export default function Experience() {
   }, [isMobile]);
 
   // SVG curved path definition:
-  // Desktop: gentle snaking curve left & right down the center
-  // Mobile: simpler vertical snaking path along the left column (X = 60 to 90)
-  const desktopPath = "M 500 0 C 320 200, 320 450, 420 580 C 520 710, 680 820, 640 1020 C 600 1220, 320 1350, 420 1580 C 520 1810, 680 1950, 620 2180 C 560 2410, 380 2550, 500 2700";
-  const mobilePath = "M 65 0 C 45 300, 95 600, 65 900 C 35 1200, 95 1500, 65 1800 C 35 2100, 95 2400, 65 2700 C 45 2950, 75 3100, 65 3200";
+  // Desktop: gentle snaking curve left & right down the center (height 2600)
+  // Mobile: simpler vertical snaking path along the left column (height 3200)
+  const desktopPath = "M 500 0 C 430 80, 480 160, 520 220 C 560 380, 440 600, 480 740 C 520 920, 560 1140, 530 1280 C 490 1460, 440 1660, 480 1800 C 520 1980, 570 2180, 540 2340 C 510 2460, 490 2540, 500 2600";
+  const mobilePath = "M 65 0 C 45 280, 90 560, 65 800 C 40 1060, 90 1340, 65 1600 C 40 1860, 90 2140, 65 2400 C 40 2660, 85 2940, 65 3200";
   const currentPathD = isMobile ? mobilePath : desktopPath;
 
   return (
@@ -210,7 +211,7 @@ export default function Experience() {
       </div>
 
       {/* TIMELINE CURVE & CONTENT WRAPPER */}
-      <div className="max-w-6xl mx-auto relative min-h-[3200px] md:min-h-[2700px] z-10">
+      <div className="max-w-6xl mx-auto relative min-h-[3200px] md:min-h-[2600px] z-10">
         {/* SVG Bezier Curve */}
         <svg
           viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
@@ -254,22 +255,11 @@ export default function Experience() {
           <div className="w-6 h-1.5 bg-slate-900/30 rounded-full blur-[1px] -mt-1.5" />
         </div>
 
-        {/* WAYPOINTS & CONTENT BLOCKS */}
+        {/* WAYPOINTS & CONTENT BLOCKS - Only Yellow Milestone Dots with Content */}
         {timelineData.map((entry) => {
           const pt = pathPoints[entry.id] || { x: viewBoxWidth * 0.5, y: entry.pathPercent * viewBoxHeight };
           const leftPercent = (pt.x / viewBoxWidth) * 100;
           const topPercent = (pt.y / viewBoxHeight) * 100;
-
-          // Minor Waypoints (Hollow gray dots for path rhythm)
-          if (entry.type === "minor") {
-            return (
-              <div
-                key={entry.id}
-                className="absolute z-20 pointer-events-none w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full bg-[#FAFAFA] border-2 border-slate-400 shadow-2xs -translate-x-1/2 -translate-y-1/2"
-                style={{ left: `${leftPercent}%`, top: `${topPercent}%` }}
-              />
-            );
-          }
 
           // Milestone Waypoints (Filled gold dots + Polaroid/Text blocks)
           const isLeftSide = entry.layoutSide === "left";
@@ -289,8 +279,8 @@ export default function Experience() {
                   <>
                     {/* Serif Text Block on LEFT */}
                     <div
-                      className="absolute right-[calc(100%-leftPercent%+3rem)] top-0 -translate-y-1/2 w-[42%] text-right pr-4"
-                      style={{ right: `${100 - leftPercent + 3.5}%` }}
+                      className="absolute top-0 -translate-y-1/2 w-[38%] lg:w-[40%] text-right pr-4"
+                      style={{ right: `${100 - leftPercent + 13}%` }}
                     >
                       <h3 className="font-serif text-2xl lg:text-3xl text-slate-900 font-normal tracking-tight leading-snug">
                         {entry.headline}
@@ -320,6 +310,19 @@ export default function Experience() {
                           ))}
                         </div>
                       )}
+                      {entry.link && (
+                        <div className="mt-3.5 flex justify-end">
+                          <a
+                            href={entry.link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-semibold bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100 transition-colors"
+                          >
+                            <span>{entry.link.label}</span>
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </a>
+                        </div>
+                      )}
                     </div>
 
                     {/* Polaroid Photo on RIGHT */}
@@ -335,7 +338,7 @@ export default function Experience() {
                             <img
                               src={entry.photo.src}
                               alt={entry.headline}
-                              className={`w-full h-full ${entry.photo.src.includes("ibm") ? "object-contain p-4 bg-white" : "object-cover"} filter contrast-[1.03] group-hover:scale-105 transition-transform duration-700`}
+                              className={`w-full h-full ${(entry.photo.src.includes("ibm") || entry.photo.src.includes("vibhum")) ? "object-contain p-4 bg-white" : "object-cover"} filter contrast-[1.03] group-hover:scale-105 transition-transform duration-700`}
                             />
                           </div>
                           <p className="text-center font-mono text-[11px] lg:text-xs text-slate-500 uppercase tracking-widest mt-3 lg:mt-4 font-medium truncate px-1">
@@ -360,7 +363,7 @@ export default function Experience() {
                             <img
                               src={entry.photo.src}
                               alt={entry.headline}
-                              className={`w-full h-full ${entry.photo.src.includes("ibm") ? "object-contain p-4 bg-white" : "object-cover"} filter contrast-[1.03] group-hover:scale-105 transition-transform duration-700`}
+                              className={`w-full h-full ${(entry.photo.src.includes("ibm") || entry.photo.src.includes("vibhum")) ? "object-contain p-4 bg-white" : "object-cover"} filter contrast-[1.03] group-hover:scale-105 transition-transform duration-700`}
                             />
                           </div>
                           <p className="text-center font-mono text-[11px] lg:text-xs text-slate-500 uppercase tracking-widest mt-3 lg:mt-4 font-medium truncate px-1">
@@ -403,6 +406,19 @@ export default function Experience() {
                           ))}
                         </div>
                       )}
+                      {entry.link && (
+                        <div className="mt-3.5 flex justify-start">
+                          <a
+                            href={entry.link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-semibold bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100 transition-colors"
+                          >
+                            <span>{entry.link.label}</span>
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </a>
+                        </div>
+                      )}
                     </div>
                   </>
                 )}
@@ -439,6 +455,19 @@ export default function Experience() {
                       ))}
                     </div>
                   )}
+                  {entry.link && (
+                    <div className="mt-3">
+                      <a
+                        href={entry.link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-semibold bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100 transition-colors"
+                      >
+                        <span>{entry.link.label}</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                  )}
 
                   {/* Polaroid below text on mobile */}
                   {entry.photo && (
@@ -450,7 +479,7 @@ export default function Experience() {
                           <img
                             src={entry.photo.src}
                             alt={entry.headline}
-                            className={`w-full h-full ${entry.photo.src.includes("ibm") ? "object-contain p-4 bg-white" : "object-cover"} filter contrast-[1.03]`}
+                            className={`w-full h-full ${(entry.photo.src.includes("ibm") || entry.photo.src.includes("vibhum")) ? "object-contain p-4 bg-white" : "object-cover"} filter contrast-[1.03]`}
                           />
                         </div>
                         <p className="text-center font-mono text-[10px] sm:text-[11px] text-slate-500 uppercase tracking-widest mt-2.5 font-medium truncate">

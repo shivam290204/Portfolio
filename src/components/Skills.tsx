@@ -1,23 +1,28 @@
 import { useEffect, useRef } from "react";
 import { FaJava, FaReact, FaNodeJs, FaPython, FaDocker, FaGitAlt, FaGithub } from "react-icons/fa";
-import { SiJavascript, SiHtml5, SiCss, SiExpress, SiSpringboot, SiMysql, SiPostgresql, SiVercel, SiC, SiTailwindcss, SiNextdotjs, SiIntellijidea } from "react-icons/si";
+import { SiJavascript, SiHtml5, SiCss, SiExpress, SiSpringboot, SiMysql, SiPostgresql, SiVercel, SiC, SiTailwindcss, SiNextdotjs, SiIntellijidea, SiFlutter, SiDart, SiSupabase, SiFastapi, SiRedis } from "react-icons/si";
 import { VscVscode } from "react-icons/vsc";
 
 const skills = [
   { name: "Java", icon: FaJava, color: "hover:text-[#f89820] hover:drop-shadow-[0_0_15px_rgba(248,152,32,0.8)]" },
+  { name: "Python", icon: FaPython, color: "hover:text-[#3776AB] hover:drop-shadow-[0_0_15px_rgba(55,118,171,0.8)]" },
+  { name: "FastAPI", icon: SiFastapi, color: "hover:text-[#009688] hover:drop-shadow-[0_0_15px_rgba(0,150,136,0.8)]" },
+  { name: "Flutter", icon: SiFlutter, color: "hover:text-[#02569B] hover:drop-shadow-[0_0_15px_rgba(2,86,155,0.8)]" },
+  { name: "Dart", icon: SiDart, color: "hover:text-[#0175C2] hover:drop-shadow-[0_0_15px_rgba(1,117,194,0.8)]" },
   { name: "JavaScript", icon: SiJavascript, color: "hover:text-[#F7DF1E] hover:drop-shadow-[0_0_15px_rgba(247,223,30,0.8)]" },
   { name: "React", icon: FaReact, color: "hover:text-[#61DAFB] hover:drop-shadow-[0_0_15px_rgba(97,218,251,0.8)]" },
+  { name: "Next.js", icon: SiNextdotjs, color: "hover:text-foreground hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]" },
   { name: "HTML5", icon: SiHtml5, color: "hover:text-[#E34F26] hover:drop-shadow-[0_0_15px_rgba(227,79,38,0.8)]" },
   { name: "CSS3", icon: SiCss, color: "hover:text-[#1572B6] hover:drop-shadow-[0_0_15px_rgba(21,114,182,0.8)]" },
   { name: "Tailwind", icon: SiTailwindcss, color: "hover:text-[#06B6D4] hover:drop-shadow-[0_0_15px_rgba(6,182,212,0.8)]" },
   { name: "Node.js", icon: FaNodeJs, color: "hover:text-[#339933] hover:drop-shadow-[0_0_15px_rgba(51,153,51,0.8)]" },
   { name: "Express.js", icon: SiExpress, color: "hover:text-foreground hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]" },
-  { name: "Next.js", icon: SiNextdotjs, color: "hover:text-foreground hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]" },
   { name: "Spring Boot", icon: SiSpringboot, color: "hover:text-[#6DB33F] hover:drop-shadow-[0_0_15px_rgba(109,179,63,0.8)]" },
-  { name: "Python", icon: FaPython, color: "hover:text-[#3776AB] hover:drop-shadow-[0_0_15px_rgba(55,118,171,0.8)]" },
-  { name: "C", icon: SiC, color: "hover:text-[#A8B9CC] hover:drop-shadow-[0_0_15px_rgba(168,185,204,0.8)]" },
-  { name: "MySQL", icon: SiMysql, color: "hover:text-[#4479A1] hover:drop-shadow-[0_0_15px_rgba(68,121,161,0.8)]" },
+  { name: "Redis", icon: SiRedis, color: "hover:text-[#DC382D] hover:drop-shadow-[0_0_15px_rgba(220,56,45,0.8)]" },
+  { name: "Supabase", icon: SiSupabase, color: "hover:text-[#3ECF8E] hover:drop-shadow-[0_0_15px_rgba(62,207,142,0.8)]" },
   { name: "PostgreSQL", icon: SiPostgresql, color: "hover:text-[#4169E1] hover:drop-shadow-[0_0_15px_rgba(65,105,225,0.8)]" },
+  { name: "MySQL", icon: SiMysql, color: "hover:text-[#4479A1] hover:drop-shadow-[0_0_15px_rgba(68,121,161,0.8)]" },
+  { name: "C", icon: SiC, color: "hover:text-[#A8B9CC] hover:drop-shadow-[0_0_15px_rgba(168,185,204,0.8)]" },
   { name: "Git", icon: FaGitAlt, color: "hover:text-[#F05032] hover:drop-shadow-[0_0_15px_rgba(240,80,50,0.8)]" },
   { name: "GitHub", icon: FaGithub, color: "hover:text-foreground hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]" },
   { name: "Docker", icon: FaDocker, color: "hover:text-[#2496ED] hover:drop-shadow-[0_0_15px_rgba(36,150,237,0.8)]" },
